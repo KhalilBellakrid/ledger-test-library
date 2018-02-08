@@ -52,5 +52,3 @@ node_modules/
 #Clion
 cmake-build-debug/
 
-#Dependencies
-deps/
