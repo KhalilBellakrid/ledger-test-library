@@ -1,7 +1,6 @@
 var axios = require('axios'),
     util = require("util");
 
-const headers = [];
 const address = "1HE4ShfmuG7AdVr5RpaCtXfsJYYQQFCj1T";
 const addresses =  [ "2N68EF7dYiUGVUHAGoWtYFXo7NfRvNraGjn",
     "2N6tZe936iWaWVKwQ6TN2uHE9uVSh1SfsBR",
