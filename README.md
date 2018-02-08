@@ -10,10 +10,11 @@ For Windows build you will need to install: **_make, libiconv, libintl_**.
 ### External dependencies:
 
 This projects is based on external modules: Djinni, json11, gyp and optional.
-To install those dependencies run:
+To get those dependencies:
 
 ```
-/bin/bash restore_submodules.sh
+git submodule init
+git submodule update --remote
 ```
 
 ## Cross-platform interfaces generation
