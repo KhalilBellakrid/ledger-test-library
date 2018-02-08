@@ -25,6 +25,8 @@ using std::function;
 #include <mutex>
 #include <condition_variable>
 
+#include <atomic>
+
 #include <experimental/optional>
 
 #if defined(_MSC_VER) && _MSC_VER <= 1800

@@ -1,8 +1,6 @@
 #ifndef LEDGERCLIENT_CLIENT_H
 #define LEDGERCLIENT_CLIENT_H
 
-#include <json11/json11.hpp>
-
 #include "stl.hpp"
 #include "types.hpp"
 #include "../http.hpp"

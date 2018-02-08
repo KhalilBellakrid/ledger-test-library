@@ -48,6 +48,12 @@
             ],
           },
         }],
+        [ 'OS=="win"', {
+			'GCC_ENABLE_CPP_EXCEPTIONS': 'YES',
+			'OTHER_CFLAGS': [
+			  '-std=c++14',
+			]
+       	 }]
       ],
       'cflags!': ['-ansi', '-fno-exceptions' ],
       'cflags_cc!': [ '-fno-exceptions' ],

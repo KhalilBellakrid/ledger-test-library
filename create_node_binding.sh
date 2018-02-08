@@ -1,7 +1,8 @@
-npm run clean
 npm i
 
-#If we need to build xcode project
+#If we need to build xcode project, leave only those commands
+#npm i
+#npm run clean
 #rm -rf build
 #npm run gypconfigx
 #npm run gypconfig

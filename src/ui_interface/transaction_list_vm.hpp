@@ -5,6 +5,8 @@
 #ifndef LEDGERAPP_TRANSACTION_VM_H
 #define LEDGERAPP_TRANSACTION_VM_H
 
+#include "stl.hpp"
+
 #include "../interface/transaction_list_vm.hpp"
 #include "../interface/transaction_list_vm_cell.hpp"
 #include "../interface/transaction_list_vm_handle.hpp"
@@ -13,8 +15,8 @@
 #include "../interface/thread_dispatcher.hpp"
 
 #include "../http.hpp"
-#include "stl.hpp"
-#include <atomic>
+
+
 
 using namespace std;
 namespace ledgerapp {
