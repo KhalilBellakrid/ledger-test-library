@@ -22,16 +22,11 @@ using std::vector;
 #include <functional>
 using std::function;
 
-// less common stuff, don't "use" them
 #include <mutex>
 #include <condition_variable>
 
-#include <optional/optional.hpp>
-using std::experimental::optional;
-using std::experimental::nullopt;
-using std::experimental::nullopt_t;
+#include <experimental/optional>
 
-// noexcept was added to MSVC in Visua
 #if defined(_MSC_VER) && _MSC_VER <= 1800
   #define noexcept throw()
 #endif
