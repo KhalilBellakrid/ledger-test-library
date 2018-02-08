@@ -2,13 +2,21 @@
 
 Test Library that allows to retrieve transactions of addresses
 
+##Clone projects with its submodules
+
+This projects is based on external modules:
+
+```
+git clone --recurse-submodules
+```
+
 ## Dependencies
+
+###Build
 For Windows build you will need to install: **_make, libiconv, libintl_**.
 
-Get all dependencies from git submodules:
-```
-git submodule update --recursive --remote
-```
+###External dependencies:
+If you didn't clone project using **--recurse-submodules**, you should provide following dependencies in _deps_ directory: Djinni, json11, gyp and optional
 
 ## Cross-platform interfaces generation
 
