@@ -3,6 +3,7 @@
 Test Library that allows to retrieve transactions of addresses
 
 ## Dependencies
+For Windows build you will need to install: **_make, libiconv, libintl_**.
 
 Get all dependencies from git submodules:
 ```
