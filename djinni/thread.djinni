@@ -1,0 +1,13 @@
+@import "async.djinni"
+
+#thread_launcher = interface +o +j {
+#    # name is nullable
+#    start_thread(name: optional<string>, run_fn: async_task);
+#}
+
+thread_dispatcher = interface +j +o{
+    getSerialExecutionContext(name: string): execution_context;
+    getThreadPoolExecutionContext(name: string): execution_context;
+    getMainExecutionContext(): execution_context;
+    newLock(): lock;
+}
