@@ -90,16 +90,16 @@ void ledgerclient::get_transactions(const shared_ptr<ledgerapp::Http> &http,
     std::string received_token;
 
     auto back_context = thread_dispatcher->getSerialExecutionContext(ledgerapp::BACK_EXECUTION_CONTEXT);
-
-    get_token(http, singleAddress, [&,http,url,callback,back_context](const std::string &token) mutable {
+    auto local_http = http;
+    get_token(http, singleAddress, [&,local_http,url,callback,back_context](const std::string &token) mutable {
 
         std::vector<ledgerapp_gen::HttpHeader> header;
         header.emplace_back(ledgerapp_gen::HttpHeader("X-LedgerWallet-SyncToken",token));
 
         //we capture thread dispatcher because we want to run on main thread injection of txs
-        auto tx_task = [&,http,url,header,callback](){
+        auto tx_task = [&,local_http,url,header,callback](){
 
-            http->get(url, header, [&,callback] (ledgerapp::HttpResponse resp) {
+            local_http->get(url, header, [&,callback] (ledgerapp::HttpResponse resp) {
                 if (resp.error) {
                     return;
                 }
