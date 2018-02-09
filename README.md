@@ -18,14 +18,6 @@ git submodule init
 git submodule update --remote
 ```
 
-## Cross-platform interfaces generation
-
-Generation of interfaces for different platforms using Djinni (C++, Objective-C and Java) :
-
-```
-make
-```
-
 ## Binding to node JS
 
 Generate binding (under _build/Release/ledgerapp_nodejs.node_):

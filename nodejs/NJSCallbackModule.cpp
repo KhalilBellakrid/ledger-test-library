@@ -34,11 +34,10 @@ NAN_METHOD(NJSCallbackModule::onSuccess){
         return Nan::ThrowError("NJSCallbackModule::onSuccess: one argument should be a string");
     }
 
-    Isolate *isolate = info.GetIsolate();
     NJSCallbackModule* obj = Nan::ObjectWrap::Unwrap<NJSCallbackModule>(info.Holder());
 
     Local<String> result = info[0]->ToString();
-    String::Utf8Value utf8(isolate, result);
+    Nan::Utf8String utf8(result);
     obj->getCallback()->on_success(0,*utf8);
 }
 

@@ -108,7 +108,6 @@ NAN_METHOD(NJSTransactionListVmObserver::stop){
         shared_ptr<ledgerapp_gen::TransactionListVmHandle> handle = observer->getHandle();
         if(handle){
             handle->stop();
-            cout<<"Unrefing"<<endl;
             observer->Unref();
         }
     }
