@@ -5,6 +5,7 @@ Test Library that allows to retrieve transactions of addresses
 ## Dependencies
 
 ### Build
+For Android, you will need JAVA to be installed on your machine.
 For Windows build you will need to install: **_make, libiconv, libintl_**.
 
 ### External dependencies:
