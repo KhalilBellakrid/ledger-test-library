@@ -221,7 +221,7 @@ const receivedTransactions = txs => {
     /*
         Do whatever you need with txs
     */
-    console.log(txs)
+    //console.log(txs)
     LGObserver._raw.stop();
 }
 
