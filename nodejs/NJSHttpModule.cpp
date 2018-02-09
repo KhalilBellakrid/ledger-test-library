@@ -4,7 +4,7 @@
 #include "NJSHttpModule.h"
 #include "NJSCallbackModule.h"
 
-NJSHttpModule::NJSHttpModule(Isolate *isolate, Local<Object> http):m_isolate(isolate)
+NJSHttpModule::NJSHttpModule(Local<Object> http)
 {
     m_http.Reset(http);
 }
@@ -24,11 +24,9 @@ NAN_METHOD(NJSHttpModule::New){
         return Nan::ThrowError("NJSHttpModule constructor requires one argument");
     }
 
-    Isolate *isolate = info.GetIsolate();
-
     try {
         if (info[0]->IsObject()) {
-            NJSHttpModule* js_http = new NJSHttpModule(isolate,info[0]->ToObject());
+            NJSHttpModule* js_http = new NJSHttpModule(info[0]->ToObject());
             js_http->Wrap(info.This());
             info.GetReturnValue().Set(info.This());
 
@@ -48,18 +46,17 @@ void NJSHttpModule::get(const std::string & url,
 
     Nan::HandleScope scope;
 
-    Isolate *isolate = GetIsolate();
-    Local<Context> context = isolate->GetCurrentContext();
-
+    Local<Context> context = Nan::GetCurrentContext();
     //Header object
     bool bInvalidHeaders = false;
-    auto header = Object::New(isolate);
+
+    auto header = Nan::New<Object>();
     if(headers){
 
         size_t headers_size = (*headers).size();
         if(headers_size > 0){
-            auto field_prop = header->CreateDataProperty(context,uint32_t(0),String::NewFromUtf8(isolate,(*headers)[0].field.c_str()));
-            auto value_prop = header->CreateDataProperty(context,uint32_t(1),String::NewFromUtf8(isolate,(*headers)[0].value.c_str()));
+            auto field_prop = header->CreateDataProperty(context,uint32_t(0),Nan::New<String>((*headers)[0].field).ToLocalChecked());
+            auto value_prop = header->CreateDataProperty(context,uint32_t(1),Nan::New<String>((*headers)[0].value).ToLocalChecked());
             bInvalidHeaders = (!field_prop.FromJust() || !value_prop.FromJust());
         }
 
@@ -69,17 +66,17 @@ void NJSHttpModule::get(const std::string & url,
         //Arguments for http request
         Handle<Value> args[3];
         //Url
-        args[0] = String::NewFromUtf8(isolate, url.c_str());
+        args[0] = Nan::New<String>(url).ToLocalChecked();
 
         //Callback
         if(headers_size > 0){
             args[1] = header;
         }else{
-            args[1] = String::NewFromUtf8(isolate, "No headers");
+            args[1] = Nan::New<String>("No headers").ToLocalChecked();
         }
 
-        Local<Object> local_http = Local<Object>::New(isolate, m_http);
-        Handle<Object> js_callack = NJSCallbackModule::wrap(isolate, callback);
+        Local<Object> local_http = Nan::New<Object>(m_http);
+        Handle<Object> js_callack = NJSCallbackModule::wrap(callback);
 
         if(js_callack.IsEmpty()){
             return Nan::ThrowError("NJSHttpModule::get: problem while retrieving native callback");

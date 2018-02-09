@@ -21,7 +21,7 @@ class NJSThreadDispatcher : public Nan::ObjectWrap, public ledgerapp_gen::Thread
     
 public:
 
-    NJSThreadDispatcher(Isolate *isolate): m_isolate(isolate){};
+    NJSThreadDispatcher(){};
     ~NJSThreadDispatcher(){};
 
     static void Initialize(Local<Object> target);
@@ -41,8 +41,6 @@ private:
 
     map<string,shared_ptr<ledgerapp_gen::ExecutionContext>> m_contexts;
     string m_first_context;
-
-    Isolate *m_isolate;
 };
 
 #endif /* NJSThreadDispatcher_h */

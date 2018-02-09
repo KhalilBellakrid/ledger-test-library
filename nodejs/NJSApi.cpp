@@ -21,14 +21,13 @@ NAN_METHOD(NJSApi::New){
         if(info.Length() != 2){
             return Nan::ThrowError("NJSApi::New: constructor needs two arguments");
         }
-    
-        Isolate *isolate = info.GetIsolate();
-        Local<Context> context = isolate->GetCurrentContext();
+        Local<Context> context = Nan::GetCurrentContext();
 
         if (info[0]->IsObject() && info[1]->IsObject()) {
 
             Local<Object> obj_http = info[0]->ToObject(context).ToLocalChecked();
             Local<Object> obj_thread_dispatcher = info[1]->ToObject(context).ToLocalChecked();
+            
             if(obj_http.IsEmpty() || obj_thread_dispatcher.IsEmpty()){
                 return Nan::ThrowError("NJSApi::New: one of two argument is invalid");
             }

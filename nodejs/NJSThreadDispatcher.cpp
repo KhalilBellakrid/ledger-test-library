@@ -14,7 +14,7 @@ shared_ptr<ledgerapp_gen::ExecutionContext> NJSThreadDispatcher::getSerialExecut
 
     setFirstContextKey(name);
     
-    auto exec_ctx = make_shared<NJSExecutionContext>(m_isolate);
+    auto exec_ctx = make_shared<NJSExecutionContext>();
 
     if(m_contexts.size() > 0){
         auto search = m_contexts.find(getFirstContextKey());
@@ -50,11 +50,10 @@ shared_ptr<ledgerapp_gen::Lock> NJSThreadDispatcher::newLock(){
 }
 
 NAN_METHOD(NJSThreadDispatcher::New) {
-        Isolate *isolate = info.GetIsolate();
         if (!info.IsConstructCall()) {
             return Nan::ThrowError("NJSThreadDispatcher::New: function can only be used as a constructor");
         }
-        NJSThreadDispatcher *obj = new NJSThreadDispatcher(isolate);
+        NJSThreadDispatcher *obj = new NJSThreadDispatcher();
         obj->Wrap(info.This());
         info.GetReturnValue().Set(info.This());
 }

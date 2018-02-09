@@ -27,13 +27,13 @@ public:
     void execute(const std::shared_ptr<ledgerapp_gen::Runnable> & runnable);
     void delay(const std::shared_ptr<ledgerapp_gen::Runnable> & runnable, int64_t millis);
 
-    NJSExecutionContext(Isolate *isolate):m_isolate(isolate){};
+    NJSExecutionContext(){};
     ~NJSExecutionContext(){};
 
 private:
-    static void execute(Isolate *isolate, NJSExecutionContext *exec_context, Local<Object> task);
+    static void execute(NJSExecutionContext *exec_context, Local<Object> task);
 
-    static void delay(Isolate *isolate, NJSExecutionContext *exec_context, Local<Object> task, int64_t millis);
+    static void delay(NJSExecutionContext *exec_context, Local<Object> task, int64_t millis);
 
     static NAN_METHOD(New);
 
@@ -42,6 +42,5 @@ private:
 
     static NAN_METHOD(Delay);
 
-    Isolate *m_isolate;
 };
 #endif /* NJSExecutionContext_h */

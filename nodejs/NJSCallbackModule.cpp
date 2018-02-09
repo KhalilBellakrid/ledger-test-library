@@ -6,9 +6,8 @@
 
 Nan::Persistent<ObjectTemplate> NJSCallbackModule::cb_object_prototype;
 
-NJSCallbackModule::NJSCallbackModule(Isolate *isolate,
-                                     const std::shared_ptr<ledgerapp_gen::HttpCallback> &callback)
-                                    :m_isolate(isolate),m_callback(callback)
+NJSCallbackModule::NJSCallbackModule(const std::shared_ptr<ledgerapp_gen::HttpCallback> &callback)
+                                    :m_callback(callback)
 {}
 
 NJSCallbackModule::~NJSCallbackModule()
@@ -18,12 +17,11 @@ NJSCallbackModule::~NJSCallbackModule()
 
 NAN_METHOD(NJSCallbackModule::New) {
 
-    Isolate *isolate = info.GetIsolate();
     if (info.IsConstructCall()) {
             return Nan::ThrowError("NJSCallbackModule::New: one of two argument is invalid");
     }
 
-    NJSCallbackModule *obj = new NJSCallbackModule(isolate,nullptr);
+    NJSCallbackModule *obj = new NJSCallbackModule(nullptr);
     obj->Wrap(info.This());
     info.GetReturnValue().Set(info.This());
 }
@@ -41,12 +39,10 @@ NAN_METHOD(NJSCallbackModule::onSuccess){
     obj->getCallback()->on_success(0,*utf8);
 }
 
-Handle<Object> NJSCallbackModule::wrap(Isolate *isolate,
-                                       const std::shared_ptr<ledgerapp_gen::HttpCallback> &callback) {
-
-    Local<ObjectTemplate> local_obj_template = Local<ObjectTemplate>::New(isolate, cb_object_prototype);
+Handle<Object> NJSCallbackModule::wrap(const std::shared_ptr<ledgerapp_gen::HttpCallback> &callback) {
+    Local<ObjectTemplate> local_obj_template = Nan::New(cb_object_prototype);
     Handle<Object> obj = local_obj_template->NewInstance();
-    NJSCallbackModule *cb = new NJSCallbackModule(isolate,callback);
+    NJSCallbackModule *cb = new NJSCallbackModule(callback);
     if(cb){
         cb->Wrap(obj);
     }else{

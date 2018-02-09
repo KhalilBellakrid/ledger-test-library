@@ -23,8 +23,7 @@ class NJSTransactionListVmObserver : public Nan::ObjectWrap,
                                      public ledgerapp_gen::TransactionListVmObserver {
 public:
 
-    NJSTransactionListVmObserver(Isolate *isolate,
-                                 shared_ptr<ledgerapp_gen::Api> api,
+    NJSTransactionListVmObserver(shared_ptr<ledgerapp_gen::Api> api,
                                  shared_ptr<ledgerapp_gen::TransactionListVmHandle> handle);
 
     ~NJSTransactionListVmObserver();
@@ -42,10 +41,8 @@ private:
     static NAN_METHOD(stop);
 
     shared_ptr<ledgerapp_gen::TransactionListVmHandle> getHandle(){return m_handle;};
-    Isolate * getIsolate(){return m_isolate;};
     void setCallback(Local<Object> callback){m_callback.Reset(callback);};
 
-    Isolate *m_isolate;
     shared_ptr<ledgerapp_gen::Api> m_api;
     shared_ptr<ledgerapp_gen::TransactionListVmHandle> m_handle;
 

@@ -23,48 +23,45 @@ void NJSExecutionContext::delay(const std::shared_ptr<ledgerapp_gen::Runnable> &
 }
 
 NAN_METHOD(NJSExecutionContext::New) {
-    Isolate *isolate = info.GetIsolate();
     if (!info.IsConstructCall()) {
         return Nan::ThrowError("NJSExecutionContext::New: function can only be used as a constructor");
     }
-    NJSExecutionContext *obj = new NJSExecutionContext(isolate);
+    NJSExecutionContext *obj = new NJSExecutionContext();
     obj->Wrap(info.This());
     info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(NJSExecutionContext::Execute){
-    Isolate *isolate = info.GetIsolate();
     if(info.Length() != 1){
         return Nan::ThrowError("NJSExecutionContext::Execute needs one argument");
     }
     NJSExecutionContext* obj = Nan::ObjectWrap::Unwrap<NJSExecutionContext>(info.Holder());
     if (info[0]->IsObject() ){
-        NJSExecutionContext::execute(isolate, obj, info[0]->ToObject());
+        NJSExecutionContext::execute(obj, info[0]->ToObject());
     }
 }
 
 NAN_METHOD(NJSExecutionContext::Delay){
     //TODO : delay execution
-    Isolate *isolate = info.GetIsolate();
     if(info.Length() != 2){
         return Nan::ThrowError("NJSExecutionContext::Delay needs two arguments");
     }
     NJSExecutionContext* obj = Nan::ObjectWrap::Unwrap<NJSExecutionContext>(info.Holder());
     if (info[0]->IsObject() && info[1]->IsNumber()){
-        NJSExecutionContext::delay(isolate, obj, info[0]->ToObject(), Nan::To<int64_t>(info[1]).ToChecked());
+        NJSExecutionContext::delay(obj, info[0]->ToObject(), Nan::To<int64_t>(info[1]).ToChecked());
     }
 }
 
-void NJSExecutionContext::execute(Isolate *isolate, NJSExecutionContext *exec_context, Local<Object> task){
-    NJSExecutionContext::delay(isolate, exec_context, task, 0);
+void NJSExecutionContext::execute(NJSExecutionContext *exec_context, Local<Object> task){
+    NJSExecutionContext::delay(exec_context, task, 0);
 }
 
-void NJSExecutionContext::delay(Isolate *isolate, NJSExecutionContext *exec_context, Local<Object> task, int64_t millis){
+void NJSExecutionContext::delay(NJSExecutionContext *exec_context, Local<Object> task, int64_t millis){
     Nan::HandleScope scope;
-    if(isolate && exec_context && task->IsCallable()){
+    if(exec_context && task->IsCallable()){
         Local<Value> arg[0];
         auto lambda_task = [&](){
-            auto result = task->CallAsFunction(isolate->GetCurrentContext(), isolate->GetCurrentContext()->Global(), 0, arg);
+            auto result = task->CallAsFunction(Nan::GetCurrentContext(), Nan::GetCurrentContext()->Global(), 0, arg);
             if(result.ToLocalChecked()->IsStringObject()){
                 cout<<"Result received"<<endl;
             }

@@ -13,10 +13,9 @@ using namespace std;
 using namespace v8;
 using namespace node;
 
-NJSTransactionListVmObserver::NJSTransactionListVmObserver(Isolate *isolate,
-                                                           shared_ptr<ledgerapp_gen::Api> api,
+NJSTransactionListVmObserver::NJSTransactionListVmObserver( shared_ptr<ledgerapp_gen::Api> api,
                                                            shared_ptr<ledgerapp_gen::TransactionListVmHandle> handle)
-                                                            :m_isolate(isolate),m_api(api),m_handle(handle)
+                                                            :m_api(api),m_handle(handle)
 {}
 NJSTransactionListVmObserver::~NJSTransactionListVmObserver()
 {
@@ -25,7 +24,6 @@ NJSTransactionListVmObserver::~NJSTransactionListVmObserver()
 
 NAN_METHOD(NJSTransactionListVmObserver::New){
 
-    Isolate *isolate = info.GetIsolate();
 
     if(!info.IsConstructCall()){
         return Nan::ThrowError("NJSTransactionListVmObserver::New: function can only be used as a constructor");
@@ -43,7 +41,7 @@ NAN_METHOD(NJSTransactionListVmObserver::New){
     if(api){
         auto handle = api->observer_transaction_list();
         if(handle){
-            NJSTransactionListVmObserver *obj = new NJSTransactionListVmObserver(isolate, api, handle);
+            NJSTransactionListVmObserver *obj = new NJSTransactionListVmObserver(api, handle);
             if(obj){
                 obj->Wrap(info.This());
                 info.GetReturnValue().Set(info.This());
@@ -119,17 +117,19 @@ void NJSTransactionListVmObserver::on_update(const std::shared_ptr<ledgerapp_gen
 
     int32_t tx_nb = new_data->count();
 
-    Isolate *isolate = getIsolate();
 
-    Local<Array> txs_array = Array::New(isolate);
+    //Local<Array> txs_array = Array::New(isolate);
+    Local<Array> txs_array = Nan::New<Array>();
     for(int32_t i = 0; i < tx_nb ; i++){
         ledgerapp_gen::TransactionListVmCell cell = *(new_data->getTransaction(i));
-        txs_array->Set((int)i,String::NewFromUtf8(isolate, cell.tx_data.c_str()));
+        txs_array->Set((int)i,Nan::New<String>(cell.tx_data).ToLocalChecked());
     }
 
-    auto context = isolate->GetCurrentContext();
+    auto context = Nan::GetCurrentContext();
     Handle<Value> args[1]{txs_array};
-    Local<Object> local_cb = Local<Object>::New(isolate,m_callback);
+    
+    //Local<Object> local_cb = Local<Object>::New(isolate,m_callback);
+    Local<Object> local_cb = Nan::New<Object>(m_callback);
     if(local_cb.IsEmpty()){
         return Nan::ThrowError("NJSTransactionListVmObserver::on_update called with non valid callback");
     }

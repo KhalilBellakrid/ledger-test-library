@@ -23,7 +23,7 @@ public:
 
     static void Initialize(Local<Object> target);
 
-    NJSHttpModule(Isolate *isolate, Local<Object> http);
+    NJSHttpModule(Local<Object> http);
     ~NJSHttpModule();
 
     void get(const std::string & url,
@@ -35,9 +35,6 @@ private:
     static NAN_METHOD(New);
     static NAN_METHOD(Init);
 
-    Isolate* GetIsolate() { return m_isolate;};
-
-    Isolate* m_isolate;
     Nan::Persistent<Object> m_http;
 };
 

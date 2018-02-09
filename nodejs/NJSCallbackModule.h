@@ -24,14 +24,13 @@ public:
 
     static void Initialize(Local<Object> target);
 
-    NJSCallbackModule(Isolate *isolate,
-                      const std::shared_ptr<ledgerapp_gen::HttpCallback> &callback);
+    NJSCallbackModule(const std::shared_ptr<ledgerapp_gen::HttpCallback> &callback);
 
     ~NJSCallbackModule();
 
     std::shared_ptr<ledgerapp_gen::HttpCallback> getCallback(){return m_callback;};
     
-    static Handle<Object> wrap(Isolate *isolate, const std::shared_ptr<ledgerapp_gen::HttpCallback> &callback);
+    static Handle<Object> wrap(const std::shared_ptr<ledgerapp_gen::HttpCallback> &callback);
     static Nan::Persistent<ObjectTemplate> cb_object_prototype;
 
 private:
@@ -40,7 +39,6 @@ private:
     static NAN_METHOD(Init);
     static NAN_METHOD(onSuccess);
 
-    Isolate *m_isolate;
     std::shared_ptr<ledgerapp_gen::HttpCallback> m_callback;
 };
 
