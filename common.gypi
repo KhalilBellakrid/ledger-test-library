@@ -1,7 +1,7 @@
 {
   'target_defaults': {
     'default_configuration': 'Debug',
-    'cflags': ['-Wall', '-Werror', '-fvisibility=hidden'],
+    'cflags': ['-Wall', '-fvisibility=hidden'],
     'cflags_cc': [ '<@(_cflags)', '-std=c++14', '-fexceptions', '-frtti' ],
     'xcode_settings': {
       'OTHER_CFLAGS' : ['<@(_cflags)'],
