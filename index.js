@@ -217,7 +217,7 @@ function getTransactions(addresses) {
     const LGObserver = new NJSTransactionListVmObserver(LGApi._raw);
 
     LGObserver._raw.start(addresses, txs => {
-      resolve(JSON.parse(txs[0]));
+      resolve(txs.map(JSON.parse));
       LGObserver._raw.stop();
     });
   });
