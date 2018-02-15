@@ -209,27 +209,23 @@ function NJSTransactionListVmObserver() {
     Test
  */
 
-var LGHttp = new NJSHttpModule(axiosRequest);
-var LGThreadDispatcher = new NJSThreadDispatcher();
-var LGApi = new NJSApi(LGHttp._raw, LGThreadDispatcher._raw);
-var LGObserver = new NJSTransactionListVmObserver(LGApi._raw);
+function getTransactions(addresses) {
+  return new Promise(resolve => {
+    const LGHttp = new NJSHttpModule(axiosRequest);
+    const LGThreadDispatcher = new NJSThreadDispatcher();
+    const LGApi = new NJSApi(LGHttp._raw, LGThreadDispatcher._raw);
+    const LGObserver = new NJSTransactionListVmObserver(LGApi._raw);
 
-/*
-    Callback called when txs received
- */
-const receivedTransactions = txs => {
-    /*
-        Do whatever you need with txs
-    */
-    //console.log(txs)
-    LGObserver._raw.stop();
+    LGObserver._raw.start(addresses, txs => {
+      resolve(JSON.parse(txs[0]));
+      LGObserver._raw.stop();
+    });
+  });
 }
 
-LGObserver._raw.start(addresses,receivedTransactions);
-
+exports.getTransactions = getTransactions;
 exports.axiosRequest = axiosRequest;
 exports.NJSHttpModule = NJSHttpModule;
 exports.NJSApi = NJSApi;
 exports.NJSThreadDispatcher = NJSThreadDispatcher;
 exports.NJSTransactionListVmObserver = NJSTransactionListVmObserver;
-

@@ -1,16 +1,7 @@
 {
-  'configurations': {
-    'Debug': {
-      'xcode_settings': {
-        'GCC_OPTIMIZATION_LEVEL': '0',
-        'ONLY_ACTIVE_ARCH': 'YES',
-      },
-    },
-  },
-
   'target_defaults': {
     'default_configuration': 'Debug',
-    'cflags': ['-Wall', '-Werror', '-fvisibility=hidden'],
+    'cflags': ['-Wall', '-fvisibility=hidden'],
     'cflags_cc': [ '<@(_cflags)', '-std=c++14', '-fexceptions', '-frtti' ],
     'xcode_settings': {
       'OTHER_CFLAGS' : ['<@(_cflags)'],
@@ -53,6 +44,7 @@
           '-fdata-sections',
           '-ffunction-sections',
         ],
+        'cflags_cc': [ '<@(_cflags)', '-std=c++14', '-fexceptions', '-frtti' ],
         'xcode_settings': {
           'DEAD_CODE_STRIPPING': 'YES',
         },
