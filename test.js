@@ -82,10 +82,11 @@ const addresses =  [ '2NFAj3yaQTVKK5tXVVCHAww3Bv9BfGgD4gK',
     '2MwbHrj6xiZJW3V6uwNzPsj8uyA6gt5EzLB',
     '2N8UYMnDTkCga2qkN1yR14cZJ9kE43mX5kV' ]
 
-yolo.getTransactions(add1).then(txs => {
+const testnetMode = true
+yolo.getTransactions(add1, testnetMode).then(txs => {
   console.log(`first one finished`)
   console.log(txs);
-  return yolo.getTransactions(addresses)
+  return yolo.getTransactions(addresses, testnetMode)
 }).then(t => {
   console.log(`finished`)
   console.log(t);

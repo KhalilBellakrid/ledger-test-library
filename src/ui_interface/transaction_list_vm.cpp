@@ -17,12 +17,15 @@ using namespace std;
 namespace ledgerapp {
 
     void TransactionListVmHandle::start(const shared_ptr<TransactionListVmObserver>& observer,
-                                   const vector<string> &addresses) {
+                                   const vector<string> &addresses, bool testnetMode) {
         m_observer = observer;
-
+        
         auto main_context = m_thread_dispatcher->getSerialExecutionContext(ledgerapp::MAIN_EXECUTION_CONTEXT);
         
         auto self = shared_from_this();
+        
+        //Set testnetMode
+        ledgerclient::testnetMode = testnetMode;
         
         ledgerclient::get_transactions(m_http, addresses, m_thread_dispatcher, [self, main_context](const vector<ledgerclient::Tx> &txs) mutable {
 

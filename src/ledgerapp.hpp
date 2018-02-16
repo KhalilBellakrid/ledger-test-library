@@ -1,7 +1,5 @@
 #ifndef LEDGERAPP_LEDGERAPP_H
 #define LEDGERAPP_LEDGERAPP_H
-#include "api.hpp"
-#include "http.hpp"
 
 namespace ledgerapp{
     const string BASE_URL = "https://api.ledgerwallet.com/blockchain/v2/btc/";

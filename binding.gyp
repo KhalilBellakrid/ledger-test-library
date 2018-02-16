@@ -12,7 +12,7 @@
       		'nodejs/NJSApi.h',
       		'nodejs/NJSThreadDispatcher.cpp',
       		'nodejs/NJSThreadDispatcher.h',
-			'nodejs/NJSExecutionContext.cpp',
+		'nodejs/NJSExecutionContext.cpp',
       		'nodejs/NJSExecutionContext.h',
       		'nodejs/NJSTransactionListVmObserver.cpp',
       		'nodejs/NJSTransactionListVmObserver.h',

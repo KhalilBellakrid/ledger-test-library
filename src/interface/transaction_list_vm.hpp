@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include <cstdint>
 #include "stl.hpp"
+#include <cstdint>
 
 namespace ledgerapp_gen {
 

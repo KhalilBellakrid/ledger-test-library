@@ -18,7 +18,7 @@ transaction_list_vm_observer = interface +o +j {
 }
 
 transaction_list_vm_handle = interface +c {
-    start(observer: transaction_list_vm_observer, addresses: list<string>);
+    start(observer: transaction_list_vm_observer, addresses: list<string>, testnetMode: bool);
     stop();
 }
 

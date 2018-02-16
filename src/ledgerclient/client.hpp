@@ -10,10 +10,10 @@ using namespace std;
 
 namespace ledgerclient {
 
+    extern bool testnetMode;
     ledgerclient::Tx parse_transaction(const json11::Json& json);
 
     void get_token(const shared_ptr<ledgerapp::Http> &http,
-                   const bool &singleAddress,
                    function<void(const std::string&)> callback);
 
     void get_transactions(const shared_ptr<ledgerapp::Http> &http,

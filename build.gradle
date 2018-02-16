@@ -52,7 +52,7 @@ task djinniGen(type: CrossPlatformExec, dependsOn: djinniBuild) {
         "--cpp-out", tmp_cpp_out,
         "--cpp-namespace", "ledgerapp_gen",
         "--ident-cpp-enum-type", "foo_bar",
-        "--cpp-optional-header", "<experimental/optional> ", // HACK: without space gradle will not put arg in quotes
+        "--cpp-optional-header", "\"stl.hpp\"",
         "--cpp-optional-template", "std::experimental::optional",
 
         "--objc-out", tmp_objc_out,

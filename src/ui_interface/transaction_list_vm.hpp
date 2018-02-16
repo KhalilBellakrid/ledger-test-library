@@ -20,9 +20,9 @@
 
 using namespace std;
 namespace ledgerapp {
-    
-    class TransactionListVmHandle;
 
+    class TransactionListVmHandle;
+    
     class TransactionListVm final : public ledgerapp_gen::TransactionListVm {
 
     public:
@@ -57,7 +57,7 @@ namespace ledgerapp {
         };
 
         virtual void start(const shared_ptr<ledgerapp_gen::TransactionListVmObserver>& observer,
-                           const vector<string> &addresses) override;
+                           const vector<string> &addresses, bool testnetMode) override;
         virtual void stop() override;
 
         shared_ptr<ledgerapp_gen::TransactionListVmObserver> getObserver(){ return m_observer;};

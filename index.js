@@ -209,14 +209,14 @@ function NJSTransactionListVmObserver() {
     Test
  */
 
-function getTransactions(addresses) {
+function getTransactions(addresses, testnetMode) {
   return new Promise(resolve => {
     const LGHttp = new NJSHttpModule(axiosRequest);
     const LGThreadDispatcher = new NJSThreadDispatcher();
     const LGApi = new NJSApi(LGHttp._raw, LGThreadDispatcher._raw);
     const LGObserver = new NJSTransactionListVmObserver(LGApi._raw);
 
-    LGObserver._raw.start(addresses, txs => {
+    LGObserver._raw.start(addresses, testnetMode, txs => {
       resolve(txs.map(JSON.parse));
       LGObserver._raw.stop();
     });

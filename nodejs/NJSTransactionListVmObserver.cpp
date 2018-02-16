@@ -52,19 +52,25 @@ NAN_METHOD(NJSTransactionListVmObserver::New){
 
 NAN_METHOD(NJSTransactionListVmObserver::start){
 
-    if(info.Length() != 2){
-        return Nan::ThrowError("NJSTransactionListVmObserver::start needs two arguments, array of addresses and a callback function");
+    if(info.Length() != 3){
+        return Nan::ThrowError("NJSTransactionListVmObserver::start needs three arguments, array of addresses and a callback function");
     }
 
     NJSTransactionListVmObserver* observer = Nan::ObjectWrap::Unwrap<NJSTransactionListVmObserver>(info.This());
     if(!observer){
         return Nan::ThrowError("NJSTransactionListVmObserver::start failed to unwrap observer");
     }
-
-    if(!info[1]->IsObject()){
+    
+    bool testnetMode = false;
+    if(!info[1]->IsBoolean()){
+        return Nan::ThrowError("NJSTransactionListVmObserver::start invalid second argument, must be a boolean");
+    }else{
+        testnetMode = Nan::To<bool>(info[1]).FromJust();
+    }
+    if(!info[2]->IsObject()){
         return Nan::ThrowError("NJSTransactionListVmObserver::start invalid second argument, must be a function");
     }else{
-        observer->setCallback(info[1]->ToObject());
+        observer->setCallback(info[2]->ToObject());
     }
 
     vector<string> addresses;
@@ -90,7 +96,7 @@ NAN_METHOD(NJSTransactionListVmObserver::start){
         shared_ptr<ledgerapp_gen::TransactionListVmObserver> shared_observer(observer);
         if(handle){
             observer->Ref();
-            handle->start(shared_observer, addresses);
+            handle->start(shared_observer, addresses, testnetMode);
         }
     }
 }

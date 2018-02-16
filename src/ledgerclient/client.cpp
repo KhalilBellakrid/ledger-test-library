@@ -13,6 +13,7 @@ using ledgerclient::Client;
 using namespace json11;
 using namespace std;
 
+bool ledgerclient::testnetMode = false;
 
 ledgerclient::Tx ledgerclient::parse_transaction(const json11::Json& data){
     ledgerclient::Tx tx;
@@ -24,25 +25,17 @@ ledgerclient::Tx ledgerclient::parse_transaction(const json11::Json& data){
 }
 
 void ledgerclient::get_token(const shared_ptr<ledgerapp::Http> &http,
-                             const bool &singleAddress,
                              function<void(const std::string&)> callback){
     if(http){
 
         //Get sync token
-        string url;
-        if(singleAddress){
-            url = ledgerapp::BASE_URL;
-        }else{
-            url = ledgerapp::TESTNET_BASE_URL;
-        }
-        
+        string url = ledgerclient::testnetMode ? ledgerapp::TESTNET_BASE_URL : ledgerapp::BASE_URL;
         url.append("syncToken");
 
         std::vector<ledgerapp_gen::HttpHeader> header;
-        
-        
+
         http->get(url, header, [callback] (ledgerapp::HttpResponse resp) {
-            
+
             if (resp.error) {
                 return;
             }
@@ -64,34 +57,28 @@ void ledgerclient::get_transactions(const shared_ptr<ledgerapp::Http> &http,
                                     const shared_ptr<ledgerapp_gen::ThreadDispatcher> &thread_dispatcher,
                                     function<void(vector<ledgerclient::Tx>)> callback)
 {
-    //Know which mode are we
-    bool singleAddress = (addresses.size() == 1);
 
     //Get sync token
-    string url;
-    if(singleAddress){
-        url = ledgerapp::BASE_URL + "addresses/" + addresses[0] + "/transactions";
-    }else{
-        //http://api.ledgerwallet.com/blockchain/v2/btc_testnet/addresses/${addresses.join(',',)}/transactions?noToken=true
-        //Join addresses
-        const string separator =",";
-        ostringstream ss;
-        auto it = addresses.begin();
-        if(it != addresses.end()) {
-            ss << *it++;
-        }
-        while(it != addresses.end()) {
-            ss << separator;
-            ss << *it++;
-        }
-        url = ledgerapp::TESTNET_BASE_URL + "addresses/" + ss.str() + "/transactions";
+    string url = ledgerclient::testnetMode ? ledgerapp::TESTNET_BASE_URL : ledgerapp::BASE_URL;
+
+    //Join addresses
+    const string separator =",";
+    ostringstream ss;
+    auto it = addresses.begin();
+    if(it != addresses.end()) {
+        ss << *it++;
     }
+    while(it != addresses.end()) {
+        ss << separator;
+        ss << *it++;
+    }
+    url.append("addresses/" + ss.str() + "/transactions");
 
     std::string received_token;
 
     auto back_context = thread_dispatcher->getSerialExecutionContext(ledgerapp::BACK_EXECUTION_CONTEXT);
     auto local_http = http;
-    get_token(http, singleAddress, [&,local_http,url,callback,back_context](const std::string &token) mutable {
+    get_token(http, [&,local_http,url,callback,back_context](const std::string &token) mutable {
 
         std::vector<ledgerapp_gen::HttpHeader> header;
         header.emplace_back(ledgerapp_gen::HttpHeader("X-LedgerWallet-SyncToken",token));
@@ -121,7 +108,7 @@ void ledgerclient::get_transactions(const shared_ptr<ledgerapp::Http> &http,
                         for (const auto& item : json_response["txs"].array_items()) {
                             txs.emplace_back( ledgerclient::parse_transaction(item) );
                         }
-                        
+
                         callback(txs);
                     }
                 }

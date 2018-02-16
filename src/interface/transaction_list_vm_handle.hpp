@@ -15,7 +15,7 @@ class TransactionListVmHandle {
 public:
     virtual ~TransactionListVmHandle() {}
 
-    virtual void start(const std::shared_ptr<TransactionListVmObserver> & observer, const std::vector<std::string> & addresses) = 0;
+    virtual void start(const std::shared_ptr<TransactionListVmObserver> & observer, const std::vector<std::string> & addresses, bool testnetMode) = 0;
 
     virtual void stop() = 0;
 };
