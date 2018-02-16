@@ -1,7 +1,7 @@
 //
 // Created by El Khalil Bellakrid on 28/01/2018.
 //
-
+#include <iostream>
 #include "NJSCallbackModule.h"
 
 Nan::Persistent<ObjectTemplate> NJSCallbackModule::cb_object_prototype;
@@ -12,7 +12,7 @@ NJSCallbackModule::NJSCallbackModule(const std::shared_ptr<ledgerapp_gen::HttpCa
 
 NJSCallbackModule::~NJSCallbackModule()
 {
-    cb_object_prototype.Reset();
+    //cb_object_prototype.Reset();
 }
 
 NAN_METHOD(NJSCallbackModule::New) {
@@ -41,12 +41,19 @@ NAN_METHOD(NJSCallbackModule::onSuccess){
 
 Handle<Object> NJSCallbackModule::wrap(const std::shared_ptr<ledgerapp_gen::HttpCallback> &callback) {
     Local<ObjectTemplate> local_obj_template = Nan::New(cb_object_prototype);
-    Handle<Object> obj = local_obj_template->NewInstance();
-    NJSCallbackModule *cb = new NJSCallbackModule(callback);
-    if(cb){
-        cb->Wrap(obj);
+    
+    Handle<Object> obj;
+    if(! local_obj_template.IsEmpty()){
+        cout<<"=====CB Object Template OK===="<<endl;
+        obj = local_obj_template->NewInstance();
+        NJSCallbackModule *cb = new NJSCallbackModule(callback);
+        if(cb){
+            cb->Wrap(obj);
+        }else{
+            Nan::ThrowError("NJSCallbackModule::wrap: failed to wrap callback");
+        }
     }else{
-        Nan::ThrowError("NJSCallbackModule::wrap: failed to wrap callback");
+        Nan::ThrowError("NJSCallbackModule::wrap: callback's object template not valid");
     }
     return obj;
 }
