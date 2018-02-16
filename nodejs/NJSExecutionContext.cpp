@@ -59,9 +59,9 @@ void NJSExecutionContext::execute(NJSExecutionContext *exec_context, Local<Objec
 void NJSExecutionContext::delay(NJSExecutionContext *exec_context, Local<Object> task, int64_t millis){
     Nan::HandleScope scope;
     if(exec_context && task->IsCallable()){
-        Local<Value> arg[0];
+        Local<Value> arg[1];
         auto lambda_task = [&](){
-            auto result = task->CallAsFunction(Nan::GetCurrentContext(), Nan::GetCurrentContext()->Global(), 0, arg);
+            auto result = task->CallAsFunction(Nan::GetCurrentContext(), Nan::GetCurrentContext()->Global(), 1, arg);
             if(result.ToLocalChecked()->IsStringObject()){
                 cout<<"Result received"<<endl;
             }
