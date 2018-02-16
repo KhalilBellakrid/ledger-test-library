@@ -1,7 +1,6 @@
 //
 // Created by El Khalil Bellakrid on 28/01/2018.
 //
-#include <iostream>
 #include "NJSCallbackModule.h"
 
 Nan::Persistent<ObjectTemplate> NJSCallbackModule::cb_object_prototype;
@@ -44,7 +43,6 @@ Handle<Object> NJSCallbackModule::wrap(const std::shared_ptr<ledgerapp_gen::Http
     
     Handle<Object> obj;
     if(! local_obj_template.IsEmpty()){
-        cout<<"=====CB Object Template OK===="<<endl;
         obj = local_obj_template->NewInstance();
         NJSCallbackModule *cb = new NJSCallbackModule(callback);
         if(cb){
